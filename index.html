@@ -1,1 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Exploiting Report</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 70px;
+            padding-left: 30px;
+        }
+        th, td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .spinner {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">Roblox Exploiting Report</span>
+        </div>
+    </header>
 
+    <div class="container mt-5">
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Player</th>
+                    <th>Report Time</th>
+                    <th>Exploit Type</th>
+                </tr>
+            </thead>
+            <tbody id="tbl_report_body">
+                <tr>
+                    <td colspan="3">Loading logs...</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="spinner text-center">
+            <img src="https://i.imgur.com/ZC0l6pB.gif" alt="Loading...">
+        </div>
+    </div>
+
+    <footer class="text-center mt-4">© 2024 Roblox Corporation. All Rights Reserved.</footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const API_URL = "https://csr.cubiodojo.workers.dev//logs"; // Replace with your Worker URL
+
+        $(document).ready(function () {
+            function fetchLogs() {
+                $.get(API_URL, function (logs) {
+                    const tbody = $("#tbl_report_body");
+                    tbody.empty(); // Clear existing rows
+
+                    logs.forEach((log, index) => {
+                        const rowColor = index % 2 === 0 ? "table-light" : "table-secondary";
+                        const row = `
+                            <tr class="${rowColor}">
+                                <td>${log.player}</td>
+                                <td>${new Date(log.timestamp).toLocaleString()}</td>
+                                <td>${log.reason}</td>
+                            </tr>
+                        `;
+                        tbody.append(row);
+                    });
+                }).fail(function () {
+                    alert("Failed to fetch logs. Please try again later.");
+                });
+            }
+
+            fetchLogs(); // Fetch logs on page load
+        });
+    </script>
+</body>
+</html>
